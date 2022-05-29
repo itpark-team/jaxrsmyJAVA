@@ -7,9 +7,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class UsersDAO {
+
+    private static UsersDAO instance = null;
+
+    public static UsersDAO getInstance() {
+        if (instance == null) {
+            instance = new UsersDAO();
+        }
+        return instance;
+    }
+
     private List<User> users;
 
-    public UsersDAO() {
+    private UsersDAO() {
         users = new ArrayList<>();
         users.add(new User(1, "Иван"));
         users.add(new User(2, "Толик"));
@@ -21,42 +31,44 @@ public class UsersDAO {
     }
 
     public User getUserById(long id) throws Exception {
-        Optional<User> foundUser = users.stream().filter(user -> user.getId() == id).findFirst();
+        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new Exception("not found");
+            throw new Exception("user not found");
         }
 
         return foundUser.get();
     }
 
-    /*public void updateEmployee(Employee employee, int id) {
-        for (Employee emp : employeeList) {
-            if (emp.getId() == id) {
-                emp.setId(employee.getId());
-                emp.setFirstName(employee.getFirstName());
-                return;
-            }
+    public void addNewUser(User user) throws Exception {
+        Optional<User> foundUser = users.stream().filter(u -> u.getId() == user.getId()).findFirst();
+
+        if (foundUser.isPresent()) {
+            throw new Exception("user already exist");
         }
-        throw new EmployeeNotFound();
+
+        users.add(user);
     }
 
-    public void deleteEmployee(int id) {
-        for (Employee emp : employeeList) {
-            if (emp.getId() == id) {
-                employeeList.remove(emp);
-                return;
-            }
+    public void updateUser(User user, long id) throws Exception {
+        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
+
+        if (!foundUser.isPresent()) {
+            throw new Exception("user not found");
         }
-        throw new EmployeeNotFound();
+
+        foundUser.get().setName(user.getName());
     }
 
-    public void addEmployee(Employee employee) {
-        for (Employee emp : employeeList) {
-            if (emp.getId() == employee.getId()) {
-                throw new EmployeeAlreadyExists();
-            }
+    public void deleteUser(long id) throws Exception {
+        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
+
+        if (!foundUser.isPresent()) {
+            throw new Exception("user not found");
         }
-        employeeList.add(employee);
-    }*/
+
+        users.remove(foundUser.get());
+    }
+
+
 }
