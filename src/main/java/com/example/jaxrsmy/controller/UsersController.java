@@ -5,8 +5,6 @@ import com.example.jaxrsmy.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.lang.annotation.Annotation;
-import java.net.URI;
 import java.util.*;
 
 @Path("/api/v1/users")
@@ -22,17 +20,20 @@ public class UsersController {
 
     @GET
     public Response getAllUsers() {
-        List<User> users = usersDAO.getAllUsers();
+
+        throw new RuntimeException("ddddd");
+
+        /*List<User> users = usersDAO.getAllUsers();
 
         return Response
                 .status(Response.Status.OK.getStatusCode())
-                .entity(users)
-                .build();
+                .entity(null)
+                .build();*/
     }
 
     @GET
     @Path("/{id}")
-    public Response getUserById(@PathParam("id") long id) throws Exception {
+    public Response getUserById(@PathParam("id") long id) {
         User user = usersDAO.getUserById(id);
 
         return Response
@@ -42,7 +43,7 @@ public class UsersController {
     }
 
     @POST
-    public Response addEmployee(User user) throws Exception {
+    public Response addEmployee(User user) {
         usersDAO.addNewUser(user);
 
         return Response
@@ -52,7 +53,7 @@ public class UsersController {
 
     @PUT
     @Path("/{id}")
-    public Response updateEmployee(User user, @PathParam("id") long id) throws Exception {
+    public Response updateEmployee(User user, @PathParam("id") long id) {
         usersDAO.updateUser(user, id);
 
         return Response
@@ -62,11 +63,11 @@ public class UsersController {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteEmployee(@PathParam("id") long id) throws Exception {
+    public Response deleteEmployee(@PathParam("id") long id)  {
         usersDAO.deleteUser(id);
 
         return Response
-                .status(Response.Status.NO_CONTENT.getStatusCode())
+                .status(Response.Status.OK.getStatusCode())
                 .build();
     }
 

@@ -30,41 +30,41 @@ public class UsersDAO {
         return users;
     }
 
-    public User getUserById(long id) throws Exception {
+    public User getUserById(long id) {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new Exception("user not found");
+            throw new RuntimeException("user not found");
         }
 
         return foundUser.get();
     }
 
-    public void addNewUser(User user) throws Exception {
+    public void addNewUser(User user)  {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == user.getId()).findFirst();
 
         if (foundUser.isPresent()) {
-            throw new Exception("user already exist");
+            throw new RuntimeException("user already exist");
         }
 
         users.add(user);
     }
 
-    public void updateUser(User user, long id) throws Exception {
+    public void updateUser(User user, long id) {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new Exception("user not found");
+            throw new RuntimeException("user not found");
         }
 
         foundUser.get().setName(user.getName());
     }
 
-    public void deleteUser(long id) throws Exception {
+    public void deleteUser(long id)  {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new Exception("user not found");
+            throw new RuntimeException("user not found");
         }
 
         users.remove(foundUser.get());
