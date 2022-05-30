@@ -40,7 +40,7 @@ public class UsersController {
     }
 
     @POST
-    public Response addEmployee(User user) {
+    public Response addUser(User user) {
         usersDAO.addNewUser(user);
 
         return Response
@@ -50,7 +50,7 @@ public class UsersController {
 
     @PUT
     @Path("/{id}")
-    public Response updateEmployee(User user, @PathParam("id") long id) {
+    public Response updateUser(User user, @PathParam("id") long id) {
         usersDAO.updateUser(user, id);
 
         return Response
@@ -60,7 +60,7 @@ public class UsersController {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteEmployee(@PathParam("id") long id) {
+    public Response deleteUser(@PathParam("id") long id) {
         usersDAO.deleteUser(id);
 
         return Response
