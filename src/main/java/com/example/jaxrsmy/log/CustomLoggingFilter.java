@@ -112,6 +112,7 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
             if (requestEntity.length != 0) {
                 builder.append(new String(requestEntity));
             }
+
             requestContext.setEntityStream(new ByteArrayInputStream(requestEntity));
         } catch (IOException e) {
             log.debug("----Exception occurred while reading request entity :{}", e.getMessage());
