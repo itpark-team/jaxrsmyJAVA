@@ -40,7 +40,7 @@ public class UsersController {
     }
 
     @POST
-    public Response addUser(User user) {
+    public Response addNewUser(User user) {
         usersDAO.addNewUser(user);
 
         return Response
