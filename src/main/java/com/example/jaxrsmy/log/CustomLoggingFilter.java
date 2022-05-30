@@ -33,7 +33,7 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
 
         log.debug("REQUEST Class Processor: {} ", resourceInfo.getResourceClass().getCanonicalName());
 
-        log.debug("REQUEST Method Name Processor: {} ", resourceInfo.getResourceMethod().getName());
+        log.debug("REQUEST Method Processor: {} ", resourceInfo.getResourceMethod().getName());
 
         String entity = readRequestEntityStream(requestContext);
         if (entity.length() > 0) {
@@ -67,27 +67,23 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
     }
 
     private void logRequestHeaders(ContainerRequestContext requestContext) {
-        Iterator iterator;
-        log.debug("---REQUEST Headers START---");
-        iterator = requestContext.getHeaders().keySet().iterator();
+        log.debug("REQUEST Headers:");
+        Iterator iterator = requestContext.getHeaders().keySet().iterator();
         while (iterator.hasNext()) {
             String headerName = iterator.next().toString();
             String headerValue = requestContext.getHeaderString(headerName);
-            log.debug("Header Name: {}, Header Value :{} ",headerName, headerValue);
+            log.debug("\t{}: {}", headerName, headerValue);
         }
-        log.debug("---REQUEST Headers FINISH---");
     }
 
     private void logResponseHeaders(ContainerResponseContext responseContext) {
-        Iterator iterator;
-        log.debug("---RESPONSE Headers START---");
-        iterator = responseContext.getHeaders().keySet().iterator();
+        log.debug("RESPONSE Headers:");
+        Iterator iterator = responseContext.getHeaders().keySet().iterator();
         while (iterator.hasNext()) {
             String headerName = iterator.next().toString();
             String headerValue = responseContext.getHeaderString(headerName);
-            log.debug("Header Name: {}, Header Value :{} ",headerName, headerValue);
+            log.debug("\t{}: {}", headerName, headerValue);
         }
-        log.debug("---RESPONSE Headers FINISH---");
     }
 
     private String readRequestEntityStream(ContainerRequestContext requestContext) {
