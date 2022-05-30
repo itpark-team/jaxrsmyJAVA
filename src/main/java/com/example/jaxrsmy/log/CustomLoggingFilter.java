@@ -1,8 +1,10 @@
 package com.example.jaxrsmy.log;
 
 import java.io.*;
+import java.util.Iterator;
 
 import javax.ws.rs.container.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 import com.google.gson.Gson;
@@ -15,6 +17,9 @@ import org.slf4j.MDC;
 @Provider
 public class CustomLoggingFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
+    @Context
+    private ResourceInfo resourceInfo;
+
     private static final Logger log = LoggerFactory.getLogger(CustomLoggingFilter.class);
 
     @Override
@@ -23,6 +28,12 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
 
         log.debug("REQUEST Endpoint: /{} ", requestContext.getUriInfo().getPath());
         log.debug("REQUEST Method: {} ", requestContext.getMethod());
+
+        logRequestHeaders(requestContext);
+
+        log.debug("REQUEST Class Processor: {} ", resourceInfo.getResourceClass().getCanonicalName());
+
+        log.debug("REQUEST Method Name Processor: {} ", resourceInfo.getResourceMethod().getName());
 
         String entity = readRequestEntityStream(requestContext);
         if (entity.length() > 0) {
@@ -43,6 +54,8 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
 
         log.debug("RESPONSE Status: {}", responseContext.getStatus());
 
+        logResponseHeaders(responseContext);
+
         String entity = readResponseEntityStream(responseContext);
         if (entity.length() > 0) {
             log.debug("RESPONSE Entity: {}", entity);
@@ -51,6 +64,30 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
         log.debug("Execution time: {} milliseconds", executionTime);
 
         MDC.clear();
+    }
+
+    private void logRequestHeaders(ContainerRequestContext requestContext) {
+        Iterator iterator;
+        log.debug("---REQUEST Headers START---");
+        iterator = requestContext.getHeaders().keySet().iterator();
+        while (iterator.hasNext()) {
+            String headerName = iterator.next().toString();
+            String headerValue = requestContext.getHeaderString(headerName);
+            log.debug("Header Name: {}, Header Value :{} ",headerName, headerValue);
+        }
+        log.debug("---REQUEST Headers FINISH---");
+    }
+
+    private void logResponseHeaders(ContainerResponseContext responseContext) {
+        Iterator iterator;
+        log.debug("---RESPONSE Headers START---");
+        iterator = responseContext.getHeaders().keySet().iterator();
+        while (iterator.hasNext()) {
+            String headerName = iterator.next().toString();
+            String headerValue = responseContext.getHeaderString(headerName);
+            log.debug("Header Name: {}, Header Value :{} ",headerName, headerValue);
+        }
+        log.debug("---RESPONSE Headers FINISH---");
     }
 
     private String readRequestEntityStream(ContainerRequestContext requestContext) {
