@@ -7,7 +7,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class MyExceptionHandler implements ExceptionMapper<WebApplicationException> {
+public class WebApplicationExceptionHandler implements ExceptionMapper<WebApplicationException> {
 
     @Override
     public Response toResponse(WebApplicationException e) {

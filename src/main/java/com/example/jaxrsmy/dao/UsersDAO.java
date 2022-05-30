@@ -35,7 +35,7 @@ public class UsersDAO {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new RuntimeException("user not found");
+            throw new WebApplicationException("user not found");
         }
 
         return foundUser.get();

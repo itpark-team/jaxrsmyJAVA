@@ -3,7 +3,6 @@ package com.example.jaxrsmy.log;
 import java.io.*;
 
 import javax.ws.rs.container.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 
 import com.google.gson.Gson;
@@ -32,13 +31,14 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
-            throws IOException {
-        String stTime = MDC.get("start-time");
-        if (null == stTime || stTime.length() == 0) {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
+        String startTimeInString = MDC.get("start-time");
+
+        if (startTimeInString == null) {
             return;
         }
-        long startTime = Long.parseLong(stTime);
+
+        long startTime = Long.parseLong(startTimeInString);
         long executionTime = System.currentTimeMillis() - startTime;
 
         log.debug("RESPONSE Status: {}", responseContext.getStatus());
@@ -48,7 +48,7 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
             log.debug("RESPONSE Entity: {}", entity);
         }
 
-        log.debug("Execution time : {} milliseconds", executionTime);
+        log.debug("Execution time: {} milliseconds", executionTime);
 
         MDC.clear();
     }
