@@ -23,22 +23,9 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
     private static final Logger log = LoggerFactory.getLogger(CustomLoggingFilter.class);
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         MDC.put("start-time", String.valueOf(System.currentTimeMillis()));
-
-        log.debug("REQUEST Endpoint: /{} ", requestContext.getUriInfo().getPath());
-        log.debug("REQUEST Method: {} ", requestContext.getMethod());
-
-        logRequestHeaders(requestContext);
-
-        log.debug("REQUEST Class Processor: {} ", resourceInfo.getResourceClass().getCanonicalName());
-
-        log.debug("REQUEST Method Processor: {} ", resourceInfo.getResourceMethod().getName());
-
-        String entity = readRequestEntityStream(requestContext);
-        if (entity.length() > 0) {
-            log.debug("REQUEST Entity: {}", entity);
-        }
+        MDC.put("request-entity", readRequestEntityStream(requestContext));
     }
 
     @Override
@@ -52,13 +39,28 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
         long startTime = Long.parseLong(startTimeInString);
         long executionTime = System.currentTimeMillis() - startTime;
 
-        log.debug("RESPONSE Status: {}", responseContext.getStatus());
+        log.debug("REQUEST");
+        log.debug("Endpoint: /{} ", requestContext.getUriInfo().getPath());
+        log.debug("Method: {} ", requestContext.getMethod());
+
+        logRequestHeaders(requestContext);
+
+        log.debug("Class Processor: {} ", resourceInfo.getResourceClass().getCanonicalName());
+        log.debug("Method Processor: {} ", resourceInfo.getResourceMethod().getName());
+
+        String requestEntity = MDC.get("request-entity");
+        if (requestEntity.length() > 0) {
+            log.debug("Entity: {}", requestEntity);
+        }
+
+        log.debug("RESPONSE");
+        log.debug("Status: {}", responseContext.getStatus());
 
         logResponseHeaders(responseContext);
 
-        String entity = readResponseEntityStream(responseContext);
-        if (entity.length() > 0) {
-            log.debug("RESPONSE Entity: {}", entity);
+        String responseEntity = readResponseEntityStream(responseContext);
+        if (responseEntity.length() > 0) {
+            log.debug("Entity: {}", responseEntity);
         }
 
         log.debug("Execution time: {} milliseconds", executionTime);
@@ -67,8 +69,15 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
     }
 
     private void logRequestHeaders(ContainerRequestContext requestContext) {
-        log.debug("REQUEST Headers:");
+        log.debug("Headers:");
+
         Iterator iterator = requestContext.getHeaders().keySet().iterator();
+
+        if(!iterator.hasNext()){
+            log.debug("\tempty");
+            return;
+        }
+
         while (iterator.hasNext()) {
             String headerName = iterator.next().toString();
             String headerValue = requestContext.getHeaderString(headerName);
@@ -77,8 +86,14 @@ public class CustomLoggingFilter implements ContainerRequestFilter, ContainerRes
     }
 
     private void logResponseHeaders(ContainerResponseContext responseContext) {
-        log.debug("RESPONSE Headers:");
+        log.debug("Headers:");
+
         Iterator iterator = responseContext.getHeaders().keySet().iterator();
+
+        if(!iterator.hasNext()){
+            log.debug("\tempty");
+            return;
+        }
         while (iterator.hasNext()) {
             String headerName = iterator.next().toString();
             String headerValue = responseContext.getHeaderString(headerName);
