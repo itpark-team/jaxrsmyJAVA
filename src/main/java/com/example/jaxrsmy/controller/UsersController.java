@@ -3,6 +3,7 @@ package com.example.jaxrsmy.controller;
 import com.example.jaxrsmy.dao.UsersDAO;
 import com.example.jaxrsmy.model.User;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.*;
@@ -40,7 +41,7 @@ public class UsersController {
     }
 
     @POST
-    public Response addNewUser(User user) {
+    public Response addNewUser(@Valid User user) {
         usersDAO.addNewUser(user);
 
         return Response
@@ -50,7 +51,7 @@ public class UsersController {
 
     @PUT
     @Path("/{id}")
-    public Response updateUser(User user, @PathParam("id") long id) {
+    public Response updateUser(@Valid User user, @PathParam("id") long id) {
         usersDAO.updateUser(user, id);
 
         return Response
