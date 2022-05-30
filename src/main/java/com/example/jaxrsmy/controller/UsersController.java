@@ -20,15 +20,12 @@ public class UsersController {
 
     @GET
     public Response getAllUsers() {
-
-        throw new RuntimeException("ddddd");
-
-        /*List<User> users = usersDAO.getAllUsers();
+        List<User> users = usersDAO.getAllUsers();
 
         return Response
                 .status(Response.Status.OK.getStatusCode())
-                .entity(null)
-                .build();*/
+                .entity(users)
+                .build();
     }
 
     @GET
@@ -63,7 +60,7 @@ public class UsersController {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteEmployee(@PathParam("id") long id)  {
+    public Response deleteEmployee(@PathParam("id") long id) {
         usersDAO.deleteUser(id);
 
         return Response

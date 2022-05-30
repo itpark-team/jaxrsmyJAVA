@@ -2,6 +2,7 @@ package com.example.jaxrsmy.dao;
 
 import com.example.jaxrsmy.model.User;
 
+import javax.ws.rs.WebApplicationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +45,7 @@ public class UsersDAO {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == user.getId()).findFirst();
 
         if (foundUser.isPresent()) {
-            throw new RuntimeException("user already exist");
+            throw new WebApplicationException("user already exist");
         }
 
         users.add(user);
@@ -54,7 +55,7 @@ public class UsersDAO {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new RuntimeException("user not found");
+            throw new WebApplicationException("user not found");
         }
 
         foundUser.get().setName(user.getName());
@@ -64,7 +65,7 @@ public class UsersDAO {
         Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
 
         if (!foundUser.isPresent()) {
-            throw new RuntimeException("user not found");
+            throw new WebApplicationException("user not found");
         }
 
         users.remove(foundUser.get());
