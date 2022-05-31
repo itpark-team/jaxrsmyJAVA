@@ -1,19 +1,9 @@
 package com.example.jaxrsmy.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class User {
     @DecimalMin(value = "1", message = "field ID cant be null and more than 1")
     private long id;
@@ -21,4 +11,28 @@ public class User {
     @NotNull(message = "field NAME cant be null")
     @Size(min = 1, max = 128, message = "field NAME size must be between 1 and 128 symbols" )
     private String name;
+
+    public User(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public User() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
