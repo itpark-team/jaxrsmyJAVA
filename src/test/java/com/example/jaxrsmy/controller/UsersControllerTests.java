@@ -212,7 +212,7 @@ public class UsersControllerTests {
 
     @Test
     public void updateValidUserTest() throws IOException {
-        HttpPut request = new HttpPut(BASE_URL + EXITING_USERID);
+        HttpPut request = new HttpPut(BASE_URL + "/3");
 
         User user = new User(3, "Пётр");
 
