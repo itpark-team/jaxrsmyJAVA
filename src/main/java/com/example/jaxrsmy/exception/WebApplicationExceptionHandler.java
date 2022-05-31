@@ -12,7 +12,7 @@ public class WebApplicationExceptionHandler implements ExceptionMapper<WebApplic
     @Override
     public Response toResponse(WebApplicationException e) {
         return Response
-                .status(500)
+                .status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(e.getMessage())
                 .type(MediaType.TEXT_PLAIN_TYPE)
                 .build();

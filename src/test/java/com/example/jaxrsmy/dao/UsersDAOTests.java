@@ -15,7 +15,7 @@ public class UsersDAOTests {
     }
 
     @Test(expected = WebApplicationException.class)
-    public void addAlreadyExistUserTest() {
+    public void addExistUserTest() {
         User user = new User(1, "Иван");
         usersDAO.addNewUser(user);
     }
@@ -23,6 +23,17 @@ public class UsersDAOTests {
     @Test(expected = WebApplicationException.class)
     public void getNonExistingUserByIdTest() {
         User user = usersDAO.getUserById(1111);
+    }
+
+    @Test(expected = WebApplicationException.class)
+    public void updateNonExitingUserTest(){
+        User user = new User(1111, "Иван");
+        usersDAO.updateUser(user, 1111);
+    }
+
+    @Test(expected = WebApplicationException.class)
+    public void deleteNonExitingUserTest(){
+        usersDAO.deleteUser(1111);
     }
 
     @Test

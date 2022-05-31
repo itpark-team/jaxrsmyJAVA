@@ -55,7 +55,7 @@ public class UsersController {
         usersDAO.updateUser(user, id);
 
         return Response
-                .status(Response.Status.OK.getStatusCode())
+                .status(Response.Status.NO_CONTENT.getStatusCode())
                 .build();
     }
 
