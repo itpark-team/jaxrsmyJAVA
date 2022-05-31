@@ -214,7 +214,7 @@ public class UsersControllerTests {
     public void updateValidUserTest() throws IOException {
         HttpPut request = new HttpPut(BASE_URL + EXITING_USERID);
 
-        User user = new User(1, "Пётр");
+        User user = new User(3, "Пётр");
 
         String json = new Gson().toJson(user);
         StringEntity entity = new StringEntity(json);
