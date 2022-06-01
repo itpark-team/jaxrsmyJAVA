@@ -23,8 +23,10 @@ public class UsersControllerTests {
     private final String BASE_URL = "http://localhost:8080/api/v1/users";
     private final String NON_EXISTING_USERID = "/1111";
     private final String EXISTING_USERID = "/1";
-    private final String UPDATING_USERID = "/3";
-    private final String DELETING_USERID = "/2";
+    private final String EXISTING_UPDATING_USERID = "/3";
+    private final String NON_EXISTING_UPDATING_USERID = "/33";
+    private final String EXISTING_DELETING_USERID = "/2";
+    private final String NON_EXISTING_DELETING_USERID = "/22";
 
     @Test
     public void getAllUsersTest() throws IOException {
@@ -147,7 +149,7 @@ public class UsersControllerTests {
     public void addValidUserTest() throws IOException {
         HttpPost request = new HttpPost(BASE_URL);
 
-        User user = new User(1111, "Пётр");
+        User user = new User(10, "Пётр");
 
         String json = new Gson().toJson(user);
         StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
@@ -169,7 +171,7 @@ public class UsersControllerTests {
 
     @Test
     public void updateNonExistingUserTest() throws IOException {
-        HttpPut request = new HttpPut(BASE_URL + NON_EXISTING_USERID);
+        HttpPut request = new HttpPut(BASE_URL + NON_EXISTING_UPDATING_USERID);
 
         User user = new User(1111, "Иван");
 
@@ -197,7 +199,7 @@ public class UsersControllerTests {
 
     @Test
     public void updateNotValidUserTest() throws IOException {
-        HttpPut request = new HttpPut(BASE_URL + EXISTING_USERID);
+        HttpPut request = new HttpPut(BASE_URL + EXISTING_UPDATING_USERID);
 
         User user = new User(0, "");
 
@@ -220,7 +222,7 @@ public class UsersControllerTests {
 
     @Test
     public void updateValidUserTest() throws IOException {
-        HttpPut request = new HttpPut(BASE_URL + UPDATING_USERID);
+        HttpPut request = new HttpPut(BASE_URL + EXISTING_UPDATING_USERID);
 
         User user = new User(3, "Пётр");
 
@@ -242,26 +244,23 @@ public class UsersControllerTests {
 
     @Test
     public void deleteNonExistingUserTest() throws IOException {
-        HttpDelete request = new HttpDelete(BASE_URL + NON_EXISTING_USERID);
+        HttpDelete request = new HttpDelete(BASE_URL + NON_EXISTING_DELETING_USERID);
 
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
         int actualResponseCode = httpResponse.getStatusLine().getStatusCode();
-        String actualBody = EntityUtils.toString(httpResponse.getEntity());
 
         int expectedResponseCode = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         String expectedBody = "user not found";
 
         String messageForStatusCodeAssert = "Status code must be - " + expectedResponseCode;
-        String messageForBodyAssert = "Body must be - " + expectedBody;
 
         Assert.assertEquals(messageForStatusCodeAssert, expectedResponseCode, actualResponseCode);
-        Assert.assertEquals(messageForBodyAssert, expectedBody, actualBody);
     }
 
     @Test
     public void deleteExistingUserTest() throws IOException {
-        HttpDelete request = new HttpDelete(BASE_URL + DELETING_USERID);
+        HttpDelete request = new HttpDelete(BASE_URL + EXISTING_DELETING_USERID);
 
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
 
