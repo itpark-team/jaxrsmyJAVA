@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import javax.ws.rs.WebApplicationException;
 
-public class UsersDAOTests {
-    private final UsersDAO usersDAO;
+public class UsersDAOTest {
+    private final UsersDAO usersDAO = UsersDAO.getInstance();
 
     private final long NON_EXISTING_USERID = 1111;
     private final long NON_EXISTING_GETING_USERID = 11111;
@@ -16,10 +16,6 @@ public class UsersDAOTests {
     private final long NON_EXISTING_UPDATING_USERID = 33;
     private final long EXISTING_DELETING_USERID = 2;
     private final long NON_EXISTING_DELETING_USERID = 22;
-
-    public UsersDAOTests() {
-        usersDAO = UsersDAO.getInstance();
-    }
 
     @Test
     public void getStartedAllUsersCountTest() {

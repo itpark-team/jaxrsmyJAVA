@@ -1,8 +1,10 @@
 package com.example.jaxrsmy.controller;
 
 import com.example.jaxrsmy.model.User;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -18,7 +20,7 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-public class UsersControllerTests {
+public class UsersControllerIntegrationTest {
 
     private final String BASE_URL = "http://localhost:8080/api/v1/users";
     private final String NON_EXISTING_USERID = "/1111";
