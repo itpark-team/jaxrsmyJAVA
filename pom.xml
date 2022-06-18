@@ -206,13 +206,13 @@
                                     <goal>start</goal>
                                 </goals>
                             </execution>
-<!--                            <execution>-->
-<!--                                <id>stop-server</id>-->
-<!--                                <phase>post-integration-test</phase>-->
-<!--                                <goals>-->
-<!--                                    <goal>stop</goal>-->
-<!--                                </goals>-->
-<!--                            </execution>-->
+                            <execution>
+                                <id>stop-server</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
                         </executions>
                     </plugin>
 
