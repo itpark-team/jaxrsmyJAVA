@@ -3,72 +3,70 @@ package com.example.jaxrsmy.dao;
 import com.example.jaxrsmy.model.User;
 
 import javax.ws.rs.WebApplicationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UsersDAO {
 
     private static UsersDAO instance = null;
 
+    private long lastId;
+    private Map<Long, User> users;
+
     public static UsersDAO getInstance() {
         if (instance == null) {
-            instance = new UsersDAO();
+            synchronized (UsersDAO.class) {
+                if (instance == null) {
+                    instance = new UsersDAO();
+                }
+            }
         }
         return instance;
     }
 
-    private List<User> users;
-
     private UsersDAO() {
-        users = new ArrayList<>();
-        users.add(new User(1, "Иван"));
-        users.add(new User(2, "Толик"));
-        users.add(new User(3, "Фёдор"));
+        users = new ConcurrentHashMap<>();
+        users.put(1l, new User(1, "Иван"));
+        users.put(2l, new User(2, "Толик"));
+        users.put(3l, new User(3, "Фёдор"));
+
+        lastId = 3;
     }
 
     public List<User> getAllUsers() {
-        return users;
+        return new ArrayList<>(users.values());
     }
 
     public User getUserById(long id) {
-        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
-
-        if (!foundUser.isPresent()) {
+        if (!users.containsKey(id)) {
             throw new WebApplicationException("user not found");
         }
 
-        return foundUser.get();
+        return users.get(id);
     }
 
-    public void addNewUser(User user)  {
-        Optional<User> foundUser = users.stream().filter(u -> u.getId() == user.getId()).findFirst();
+    public void addNewUser(User user) {
+        lastId++;
+        user.setId(lastId);
 
-        if (foundUser.isPresent()) {
-            throw new WebApplicationException("user already exist");
-        }
-
-        users.add(user);
+        users.put(lastId, user);
     }
 
     public void updateUser(User user, long id) {
-        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
-
-        if (!foundUser.isPresent()) {
+        if (!users.containsKey(id)) {
             throw new WebApplicationException("user not found");
         }
 
-        foundUser.get().setName(user.getName());
+        User foundUser = users.get(id);
+        foundUser.setName(user.getName());
     }
 
-    public void deleteUser(long id)  {
-        Optional<User> foundUser = users.stream().filter(u -> u.getId() == id).findFirst();
-
-        if (!foundUser.isPresent()) {
+    public void deleteUser(long id) {
+        if (!users.containsKey(id)) {
             throw new WebApplicationException("user not found");
         }
 
-        users.remove(foundUser.get());
+        users.remove(id);
     }
 
 

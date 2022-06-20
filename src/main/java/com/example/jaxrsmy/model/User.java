@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class User {
-    @DecimalMin(value = "1", message = "field ID cant be null and more than 1")
     private long id;
 
     @NotNull(message = "field NAME cant be null")
